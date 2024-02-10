@@ -27,10 +27,13 @@ app.get('/api/bankInfo', async (req, res) => {
             executablePath: await chromium.executablePath(),
             headless: true,
         } : {};
+        console.log("Launch options set")
 
         browser = await puppeteer.launch(launchOptions);
+        console.log("Browser launched");
         
         const page = await browser.newPage();
+        console.log("New page created");
         
         await page.goto(`https://www.frbservices.org/EPaymentsDirectory/achResults.html?bank=&aba=${aba}`, { waitUntil: 'networkidle0' });
         console.log("Page loaded");
