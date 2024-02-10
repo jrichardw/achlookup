@@ -1,6 +1,8 @@
 const express = require('express');
-const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
+// Dynamically require the appropriate Puppeteer package
+const puppeteer = process.env.NODE_ENV === 'production' ? require('puppeteer-core') : require('puppeteer');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,19 +18,24 @@ app.get('/api/bankInfo', async (req, res) => {
     console.log("Request received");
     console.log("Initiating puppeteer");
 
+    const LOCAL_CHROME_EXECUTABLE = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+
     let browser = null;
     try {
-        browser = await puppeteer.launch({
+        const launchOptions = process.env.NODE_ENV === 'production' ? {
             args: chromium.args,
             executablePath: await chromium.executablePath(),
-            headless: true, //chromium.headless,
-        });
+            headless: true,
+        } : {};
+
+        browser = await puppeteer.launch(launchOptions);
         
         const page = await browser.newPage();
-        await page.goto(`https://www.frbservices.org/EPaymentsDirectory/achResults.html?bank=&aba=${aba}`, { waitUntil: 'networkidle2' });
-
+        
+        await page.goto(`https://www.frbservices.org/EPaymentsDirectory/achResults.html?bank=&aba=${aba}`, { waitUntil: 'networkidle0' });
         console.log("Page loaded");
 
+        // puppeteer logic
         const agreeButton = await page.$("#agree_terms_use");
         if (agreeButton) {
             console.log("Agree button found, clicking...");
