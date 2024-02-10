@@ -20,7 +20,7 @@ app.get('/api/bankInfo', async (req, res) => {
     try {
         browser = await puppeteer.launch({
             args: chromium.args,
-            executablePath: await chromium.executablePath,
+            executablePath: await chromium.executablePath(),
             headless: true, //chromium.headless,
         });
         
