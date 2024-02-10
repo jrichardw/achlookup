@@ -11,13 +11,5 @@
       "src": "/api/(.*)",
       "dest": "/index.js"
     }
-  ],
-  "env": {
-    "CHROME_AWS_LAMBDA_VERSION": "10.1.0"
-  },
-  "build": {
-    "env": {
-      "CHROME_AWS_LAMBDA_VERSION": "10.1.0"
-    }
-  }
+  ]
 }

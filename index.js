@@ -1,6 +1,6 @@
 const express = require('express');
 const puppeteer = require('puppeteer-core');
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chromium');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,7 +21,7 @@ app.get('/api/bankInfo', async (req, res) => {
         browser = await puppeteer.launch({
             args: chromium.args,
             executablePath: await chromium.executablePath,
-            headless: chromium.headless,
+            headless: true, //chromium.headless,
         });
         
         const page = await browser.newPage();
