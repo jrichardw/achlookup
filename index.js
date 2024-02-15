@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const chromium = require('@sparticuz/chromium');
 // Dynamically require the appropriate Puppeteer package
 const puppeteer = process.env.NODE_ENV === 'production' ? require('puppeteer-core') : require('puppeteer');
@@ -6,6 +7,15 @@ const puppeteer = process.env.NODE_ENV === 'production' ? require('puppeteer-cor
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// CORS Middleware
+app.use((req, res, next) => {
+    // Set CORS headers
+    res.header("Access-Control-Allow-Origin", "*"); // Adjust as needed for production
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Add other methods as needed
+    next();
+});
 
 app.get('/api/bankInfo', async (req, res) => {
     const { aba } = req.query;
